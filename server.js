@@ -7,7 +7,7 @@ const sql = new Pool({
     password: "senai",
     host: "localhost",
     port: 5432,
-    database: "receitas"
+    database: "apicrud_rfs"
 })
 
 const servidor = Fastify();
@@ -19,10 +19,10 @@ servidor.register(cors, {
 servidor.post('/login', async (request, reply) => {
     const body = request.body;
     if (!body || !body.email || !body.senha) {
-        reply.status(400).send({error: "email e senha obrigatórios!"})
+        reply.status(400).send({error: "Email e Senha obrigatórios!"})
     }
 
-    const resultado = await sql.query('select * from usuario where email = $1 AND senha = $2', [body.email, body.senha])
+    const resultado = await sql.query('select * from usuarios where email = $1 AND senha = $2', [body.email, body.senha])
     if (resultado.rows.length === 0){
         reply.status(401).send({message: "Usuário ou senha inválidos!", login: false})
     }  else if (resultado.rows.length === 1) {
@@ -30,9 +30,8 @@ servidor.post('/login', async (request, reply) => {
     }
 })
 
-
 servidor.get('/usuarios', async () => {
-    const resultado = await sql.query('select * from usuario')
+    const resultado = await sql.query('select * from usuarios')
     return resultado.rows
 })
 
@@ -45,7 +44,7 @@ servidor.post('/usuarios', async (request, reply) => {
         })
     }
 
-    const resultado = await sql.query('INSERT INTO usuario (nome, senha, email) VALUES ($1, $2, $3)', [body.nome, body.senha, body.email])
+    const resultado = await sql.query('INSERT INTO usuarios (nome, senha, email) VALUES ($1, $2, $3)', [body.nome, body.senha, body.email])
     reply.status(201).send({ message: 'Usuário Criado!' })
 })
 
@@ -63,24 +62,33 @@ servidor.put('/usuarios/:id', async (request, reply) => {
         })
     }
 
-    const usuario = await sql.query('select * from usuario where id = $1', [id])
+    const usuario = await sql.query('select * from usuarios where id = $1', [id])
     if (usuario.rows.length === 0) {
         return reply.status(400).send({
             message: "Usuário não existe!"
         })
     }
 
-    const resultado = await sql.query('UPDATE usuario SET nome = $1, senha = $2, email = $3 WHERE id = $4', [body.nome, body.senha, body.email, id])
+    const resultado = await sql.query('UPDATE usuarios SET nome = $1, senha = $2, email = $3 WHERE id = $4', [body.nome, body.senha, body.email, id])
     reply.status(201).send({message: `Usuário ${body.nome} alterado!`})
 })
 
 servidor.delete('/usuarios/:id', async (request, reply) => {
     const id = request.params.id
-    const resultado = await sql.query('DELETE FROM usuario where id = $1', [id])
+    const resultado = await sql.query('DELETE FROM usuarios where id = $1', [id])
     console.log(resultado);
     reply.status(200).send({ message: 'Usuário Deletado!' })
 })
 
 servidor.listen({
     port: 3000
+})
+
+servidor.post('/chamados', async (request, reply) => {
+    const body = request.body;
+    if (!titulo || !usuario_id) {
+        return reply.status(400).send({ message: "Título e ID do responsável são obrigatórios!" })
+    } 
+    await sql.query('INSERT INTO chamados (titulo, descricao, usuario_id) VALUES ($1, $2, $3)', [titulo, descricao, usuario_id])
+    reply.status(201).send({ message: 'Chamado aberto com sucesso!' })
 })
