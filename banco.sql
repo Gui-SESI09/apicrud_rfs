@@ -11,11 +11,6 @@ CREATE TABLE chamados (
     titulo VARCHAR(150) NOT NULL,
     descricao TEXT,
     status VARCHAR(20) DEFAULT 'Aberto',
-    usuario_id INTEGER NOT NULL,
-    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP, 
-    
-    CONSTRAINT fk_usuario 
-        FOREIGN KEY(usuario_id) 
-        REFERENCES usuarios(id) 
-        ON DELETE CASCADE
+    usuario_id INTEGER NOT NULL REFERENCES usuarios(id),
+    criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
