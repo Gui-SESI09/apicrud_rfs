@@ -10,14 +10,17 @@ const sql = new Pool({
 })
 
 const servidor = Fastify();
-
+//Preparando novo método
 servidor.metodo('/a', async (request, reply) => {
     // 1. Pegar os dados que o usuário enviou (body ou params)
-    
+    const body = request.body;
+    if(!body || !body. || !body.){
+        return reply.status().send({ message: ""})
+    }
     // 2. Executar o comando SQL usando os dados acima
-     
+    await sql.query(', [body., body., body.')
     // 3. Devolver uma resposta (sucesso ou erro)
-     
+    reply.status().send({message : ""})
 })
 
 //POST RF01 E RF08: Criar chamado com responsável E conter título e descrição.
