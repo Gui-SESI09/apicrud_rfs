@@ -1,6 +1,6 @@
 ###
 
-GET http://localhost:3000/usuarios
+GET http://localhost:3000/usuarios/
 
 ###
 
@@ -8,12 +8,26 @@ POST http://localhost:3000/chamados
 Content-Type: application/json
 
 {
-    "titulo": "PC não Liga",
+    "titulo": "PC não Ligaaaaadsasda",
     "descricao": "Algo de incorreto está ocorrendo",
     "usuario_id": "1"
 }
 
 ###
 
-DELETE 
-POST http://localhost:3000/chamados/1
+###
+
+POST http://localhost:3000/localhost:3000/usuarios
+Content-Type: application/json
+
+{
+    "nome": "Gui"
+    "email": "gui@estudante.com"
+    "senha": "paocomqueijo"
+}
+
+###
+
+DELETE http://localhost:3000/chamados/1
+
+###

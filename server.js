@@ -22,20 +22,33 @@ servidor.post('/chamados', async (request, reply) => {
     await sql.query('INSERT INTO chamados (titulo, descricao, usuario_id) VALUES ($1, $2, $3)', [body.titulo, body.descricao, body.usuario_id]);
     
     reply.status(201).send({ message: 'Chamado foi aberto com sucesso!'});
+})  
+
+servidor.post('/usuarios', async (request, reply) => {
+    
+    const body = request.body;
+    if(!body || !body.nome || !body.email || !body.senha){
+        return reply.status(400).send({ message: "Dados não encontrados verifique os dados do usuário!"});
+    }
+    
+    await sql.query('INSERT INTO chamados (nome, email, senha) VALUES ($1, $2, $3)', [body.nome, body.email, body.senha]);
+    
+    reply.status(201).send({ message: 'Chamado foi aberto com sucesso!'});
 })
 
 //POST RF02 E RF03: Chamados através de um filtro por responsável.
-servidor.get('/chamados/:usuario_id', async (request, reply) => {
+servidor.get('/usuarios/:id', async (request, reply) => {
     const body = request.body;
-    if(!body || !body.id){
+    if(!body || !body.id){ 
         return reply.status(400).send({ message: "ID de usuário não existe ou foi inserido incorretamente!"});
     }
-    await sql.query('SELECT * FROM chamados WHERE usuario_id = $1,' [body.usuario_id]);
+    const resultado = await sql.query('SELECT * FROM chamados WHERE usuario_id = $1', [body.usuario_id]);
     
     reply.status(201).send({message : "Tudo está correto, veja os chamados referentes ao usuário solicitado!"});
+    reply.status(201).send(resultado.rows);
 });
 
-//POST RF05: Deletar Chamados
+//DELETE RF05: Deletar Chamados
 servidor.delete('/chamados/:id', async (request, reply) => {
     const body = request.body;
     if(!body || !body.id){
