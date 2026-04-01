@@ -17,17 +17,29 @@ Content-Type: application/json
 
 ###
 
-POST http://localhost:3000/localhost:3000/usuarios
+POST http://localhost:3000//usuarios
 Content-Type: application/json
 
 {
-    "nome": "Gui"
-    "email": "gui@estudante.com"
+    "nome": "Gui1",
+    "email": "gui@estudante.com",
     "senha": "paocomqueijo"
 }
 
 ###
 
 DELETE http://localhost:3000/chamados/1
+
+###
+
+###
+
+PUT http://localhost:3000/chamados/3
+Content-Type:application/json
+
+{
+    "titulo": "asdadas",
+    "descricao": "dasdasdasd"
+}
 
 ###

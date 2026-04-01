@@ -24,6 +24,7 @@ servidor.post('/chamados', async (request, reply) => {
     reply.status(201).send({ message: 'Chamado foi aberto com sucesso!'});
 })  
 
+//POST somente para criar os usuários e os chamados funcionarem
 servidor.post('/usuarios', async (request, reply) => {
     
     const body = request.body;
@@ -31,21 +32,15 @@ servidor.post('/usuarios', async (request, reply) => {
         return reply.status(400).send({ message: "Dados não encontrados verifique os dados do usuário!"});
     }
     
-    await sql.query('INSERT INTO chamados (nome, email, senha) VALUES ($1, $2, $3)', [body.nome, body.email, body.senha]);
+    await sql.query('INSERT INTO usuarios (nome, email, senha) VALUES ($1, $2, $3)', [body.nome, body.email, body.senha]);
     
     reply.status(201).send({ message: 'Chamado foi aberto com sucesso!'});
 })
 
-//POST RF02 E RF03: Chamados através de um filtro por responsável.
+//GET RF02 E RF03: Chamados através de um filtro por responsável.
 servidor.get('/usuarios/:id', async (request, reply) => {
-    const body = request.body;
-    if(!body || !body.id){ 
-        return reply.status(400).send({ message: "ID de usuário não existe ou foi inserido incorretamente!"});
-    }
-    const resultado = await sql.query('SELECT * FROM chamados WHERE usuario_id = $1', [body.usuario_id]);
-    
-    reply.status(201).send({message : "Tudo está correto, veja os chamados referentes ao usuário solicitado!"});
-    reply.status(201).send(resultado.rows);
+    const resultado = await sql.query('SELECT * FROM usuarios');
+    reply.status(201).send({message : "Tudo está correto, veja os chamados referentes ao usuário solicitado!", dados: resultado.rows});
 });
 
 //DELETE RF05: Deletar Chamados
@@ -56,6 +51,19 @@ servidor.delete('/chamados/:id', async (request, reply) => {
     }
     await sql.query('DELETE FROM chamados WHERE id = $1', [body.id]);
     reply.status(201).send({message : "Tudo está correto, seu chamado foi deletado!"});
+});
+
+// RF Restantes 04 - BD, 07 - Realizar Cadastro e Login
+
+//PUT RF06: Editar chamados
+servidor.put('/chamados/:id', async (request, reply) => {
+    const body = request.body;
+    const id = request.params.id;
+    if(!body){
+        return reply.status(400).send({ message: "Há algo de errado na sua atualização"})
+    }
+    await sql.query('UPDATE chamados SET titulo = $1, descricao = $2 where id = $3', [body.titulo, body.descricao, id]);
+    reply.status(200).send({message: "Seus dados foram atualizados, verifique no GET!"})
 });
 
 servidor.listen({
