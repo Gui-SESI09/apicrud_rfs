@@ -53,7 +53,7 @@ servidor.delete('/chamados/:id', async (request, reply) => {
     reply.status(201).send({message : "Tudo está correto, seu chamado foi deletado!"});
 });
 
-// RF Restantes 04 - BD, 07 - Realizar Cadastro e Login
+// RF Restantes: 07 - Realizar Cadastro e Login
 
 //PUT RF06: Editar chamados
 servidor.put('/chamados/:id', async (request, reply) => {
