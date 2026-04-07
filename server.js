@@ -10,6 +10,7 @@ const sql = new Pool({
 })
 
 const servidor = Fastify();
+//Professor, durante o desenvolvimento fiz esses comentários pra me organizar, devo retirar e nunca postar eles? (Comentários de RF para get, post, put e delete)
 
 //POST RF01 E RF08: Criar chamado com responsável E conter título e descrição.
 servidor.post('/chamados', async (request, reply) => {
@@ -24,7 +25,7 @@ servidor.post('/chamados', async (request, reply) => {
     reply.status(201).send({ message: 'Chamado foi aberto com sucesso!'});
 })  
 
-//POST somente para criar os usuários e os chamados funcionarem
+//RF07: Fazer Cadastro e Login.
 servidor.post('/usuarios', async (request, reply) => {
     
     const body = request.body;
@@ -52,8 +53,6 @@ servidor.delete('/chamados/:id', async (request, reply) => {
     await sql.query('DELETE FROM chamados WHERE id = $1', [body.id]);
     reply.status(201).send({message : "Tudo está correto, seu chamado foi deletado!"});
 });
-
-// RF Restantes: 07 - Realizar Cadastro e Login
 
 //PUT RF06: Editar chamados
 servidor.put('/chamados/:id', async (request, reply) => {
